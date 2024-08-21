@@ -14,3 +14,12 @@ class Post(Base):
     #which will be set when the column is left empty
     #also, note you need to use "server_default=" parameter in order to define the default value to be given by the postgresql server
     created_at = Column(TIMESTAMP(timezone=True), nullable= False, server_default= text('now()'))
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, nullable = False, primary_key=True)
+    email = Column(String, nullable=False, unique=True)
+    password = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), nullable= False, server_default= text('now()'))

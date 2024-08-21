@@ -6,8 +6,9 @@ import time
 import psycopg2 as pg
 from psycopg2.extras import RealDictCursor #we need this to load the column names, without this only the values will be rendered
 from .database import engine, get_db
-from . import models, schemas
+from . import models, schemas, utils
 from sqlalchemy.orm import Session
+
 
 models.Base.metadata.create_all(bind=engine) #this statement creates a table and what it does is it looks for a table if existing with the name mentioned in the model, if there's no such table, it will make one. 
 #so even after you change the code in the models.py, the table will remain unaffected.
@@ -103,6 +104,7 @@ def create_post(post : schemas.PostCreate, db : Session = Depends(get_db)):
     # we need to commit the above changes
     db.commit()
     db.refresh(new_post) #returns the entire rows of the new post created 
+    #remember to return the new post or else u will get an error as to which particular posts's details should be shown as response to the user in the same format of the response model
     return new_post
 
 #'/posts/latest' will give error as there is another identical link above ie the /posts/{id} and is looking for the id to be an integer value
@@ -149,3 +151,19 @@ def update_post(id: int, post: schemas.PostBase,  db : Session = Depends(get_db)
     db.commit()
 
     return {"edited_post": edited_post_query.first()}
+
+
+@app.post("/users", status_code= status.HTTP_201_CREATED, response_model=schemas.UserResponse)
+def create_user (user: schemas.UserCreate, db : Session = Depends(get_db)):
+
+    #has the password which can be retrieved from user.password stored inside the user object
+    hashed_password = utils.hash_password(user.password)
+    user.password = hashed_password
+
+    new_user = models.User(**user.dict())
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+
+    #remember to return the new user or else u will get an error as to whose details should be shown as response to the user in the same format of the response model
+    return new_user 

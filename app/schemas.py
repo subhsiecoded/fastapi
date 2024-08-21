@@ -1,5 +1,5 @@
 # define your schemas and pydantic objects here, and import the modesl to other files 
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import datetime
 class PostBase(BaseModel):
     title: str
@@ -20,7 +20,6 @@ class PostCreate(PostBase):
 
 
 
-
 class Post(BaseModel):
     #you are defining the fields you want to show the user in the response, you can add id and created_at too
     id:int
@@ -28,9 +27,23 @@ class Post(BaseModel):
 
 
 
-
     #if you are setting the class as a response model, you will get an error as the response will not be a valid dict 
     # so you need to add another class called Config() where you need to set the orm_mode to True. 
     # Pydantic's orm_mode will tell the Pydantic model to read the data even if it is not a dict, but an ORM model (or any other arbitrary object with attributes).
+    class Config():
+        orm_mode = True
+
+#using EmailStr class from pydantic module to be able to validate email entered by the user 
+class UserCreate(BaseModel):
+    email: EmailStr
+    password: str
+
+
+class UserResponse(BaseModel):
+    id: int
+    email: EmailStr
+    created_at: datetime
+
+    # remember to make sure orm_mode is set to True
     class Config():
         orm_mode = True
