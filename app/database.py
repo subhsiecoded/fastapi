@@ -2,7 +2,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-SQLALCHEMY_DATABASE_URL = "postgresql://postgres:root%40!5702@localhost/fastapi"
+SQLALCHEMY_DATABASE_URL = "postgresql://fastapi_c6q9_user:QaJUykwMkBaoGBCMSgJNacatqvYmlSWY@dpg-cr2ob12j1k6c73eau1r0-a.oregon-postgres.render.com/fastapi_c6q9"
+
 
 engine= create_engine(SQLALCHEMY_DATABASE_URL)
 
