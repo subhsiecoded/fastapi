@@ -11,7 +11,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 SECRET_KEY = "BJVkBNpZ723DhWE5ahh2r-KS4T0zbvT4J9_zba1TVryYnU0PJ3PLC6NX9HypQ4po9Aw"
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 1
+ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login') # this is going to be the login url
