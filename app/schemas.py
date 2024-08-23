@@ -1,5 +1,6 @@
 # define your schemas and pydantic objects here, and import the modesl to other files 
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 from datetime import datetime
 class PostBase(BaseModel):
     title: str
@@ -47,3 +48,19 @@ class UserResponse(BaseModel):
     # remember to make sure orm_mode is set to True
     class Config():
         orm_mode = True
+
+
+
+class UserLogin (BaseModel):
+    email: EmailStr
+    password : str
+
+
+# we need to define a schema for the token 
+class Token(BaseModel):
+    access_token : str
+    token_type : str 
+
+#we can also set up a schema for the token data, i.e., the data to be embedded into the access token
+class TokenData(BaseModel):
+    id: Optional[str] = None #this means that this field is optional of type string and the default value  is None
