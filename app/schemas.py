@@ -2,6 +2,7 @@
 from pydantic import BaseModel, EmailStr
 from typing import Optional
 from datetime import datetime
+
 class PostBase(BaseModel):
     title: str
     content: str
@@ -19,14 +20,21 @@ class PostBase(BaseModel):
 class PostCreate(PostBase):
     pass
 
+class UserResponse(BaseModel):
+    id: int
+    email: EmailStr
+    created_at: datetime
 
+    # remember to make sure orm_mode is set to True
+    class Config():
+        orm_mode = True
 
-class Post(BaseModel):
+class Post(PostBase):
     #you are defining the fields you want to show the user in the response, you can add id and created_at too
     id:int
     created_at:datetime
-
-
+    owner_id: int
+    owner : UserResponse # you pass a schema here, if you get an error, make sure to move the schema above this class as python reads the file top to down.
 
     #if you are setting the class as a response model, you will get an error as the response will not be a valid dict 
     # so you need to add another class called Config() where you need to set the orm_mode to True. 
@@ -40,17 +48,6 @@ class UserCreate(BaseModel):
     password: str
 
 
-class UserResponse(BaseModel):
-    id: int
-    email: EmailStr
-    created_at: datetime
-
-    # remember to make sure orm_mode is set to True
-    class Config():
-        orm_mode = True
-
-
-
 class UserLogin (BaseModel):
     email: EmailStr
     password : str
@@ -60,6 +57,10 @@ class UserLogin (BaseModel):
 class Token(BaseModel):
     access_token : str
     token_type : str 
+    id : int
+
+    class Config():
+        orm_mode = True
 
 #we can also set up a schema for the token data, i.e., the data to be embedded into the access token
 class TokenData(BaseModel):

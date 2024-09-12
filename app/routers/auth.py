@@ -35,5 +35,5 @@ def login(user_cred: OAuth2PasswordRequestForm = Depends(), db: Session = Depend
 
     access_token = oauth2.create_access_token(data= {"user_id" : user.id}) #remember the data is the payload and is a dict type
     
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "id" : user.id}
     
